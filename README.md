@@ -1,36 +1,35 @@
-# 🏛️ Linna Arquitetura - Website
+# 🏛️ Linna Arquitetura - Painel Administrativo & Website
 
 > "Espaços que inspiram pessoas."
 
-Este projeto é a versão moderna e de alta performance do site institucional da **Linna Arquitetura**, migrado de um site estático para uma aplicação web completa utilizando a stack mais atual do mercado.
+Este projeto evoluiu de um site estático para uma **Aplicação Web Full Stack** de alta performance. Agora, além do frontend cinematográfico, a Linna Arquitetura possui um **Painel Administrativo** completo para gestão de conteúdo em tempo real.
 
-## 🚀 Tecnologias (The Modern Stack)
+## 🚀 Tecnologias (The Modern Full Stack)
 
-O projeto foi desenvolvido focando em performance, escalabilidade e animações fluidas.
+O projeto utiliza o que há de mais moderno para garantir velocidade, segurança e facilidade de manutenção.
 
-* **Core:** [Next.js 15+](https://nextjs.org/) (App Router) & [React](https://react.dev/)
-* **Linguagem:** [TypeScript](https://www.typescriptlang.org/) (Segurança e tipagem estática)
-* **Estilização:** [Tailwind CSS v4](https://tailwindcss.com/) (Design System utilitário e responsivo)
-* **Animações:** [Framer Motion](https://www.framer.com/motion/) (Interações complexas, 3D e física)
-* **Ícones:** [Lucide React](https://lucide.dev/)
+*   **Core:** [Next.js 15+](https://nextjs.org/) (App Router)
+*   **Backend & Database:** [Supabase](https://supabase.com/) (PostgreSQL)
+*   **Autenticação:** Supabase Auth (Proteção de rotas administrativas)
+*   **Estilização:** [Tailwind CSS v4](https://tailwindcss.com/)
+*   **Animações:** [Framer Motion](https://www.framer.com/motion/)
+*   **Segurança de Dados:** Row Level Security (RLS) no banco de dados.
 
-## ✨ Funcionalidades e Destaques
+## ✨ Funcionalidades do Painel Administrativo
 
-* **Hero Cinematográfico:** Efeito Ken Burns (Zoom suave) e textos com revelação sequencial.
-* **Carrossel 3D (Seção Método):** Um carrossel giratório com física realista para apresentar o processo de trabalho.
-* **Efeito Tilt 3D (Quem Somos):** Fotos da equipe que reagem ao movimento do mouse com inclinação e reflexo dinâmico.
-* **Drag-to-Scroll (Equipe):** Interface tátil para navegar pelos membros da equipe clicando e arrastando.
-* **Marquee Infinito (Parceiros):** Faixa de logos com rolagem contínua e efeito de fade nas bordas.
-* **Portfólio Interativo:** Cards com mini-galeria interna que permite navegar pelas fotos sem sair da página.
-* **Performance:** Imagens otimizadas automaticamente pelo Next.js e carregamento inteligente de fontes (Montserrat).
+O painel permite o controle total do site institucional sem a necessidade de mexer no código:
+
+*   **Dashboard Dinâmico:** Indicadores em tempo real de projetos, membros e perguntas frequentes.
+*   **Gestão de Portfólio (CRUD):** Cadastro, edição e exclusão de projetos com suporte a upload de imagens.
+*   **Gestão de Equipe:** Controle dos perfis dos colaboradores, cargos e biografias.
+*   **Central de FAQ:** Gerenciamento de perguntas e respostas para suporte ao cliente.
+*   **Segurança:** Área administrativa protegida por login e senha.
 
 ## 🛠️ Como Rodar o Projeto
 
-Siga os passos abaixo para rodar o projeto em sua máquina local.
-
 ### Pré-requisitos
-
-* Node.js instalado (Versão 18 ou superior recomendada).
+*   Node.js (Versão 18 ou superior).
+*   Conta no Supabase (Para o banco de dados).
 
 ### Instalação
 
@@ -45,23 +44,29 @@ Siga os passos abaixo para rodar o projeto em sua máquina local.
     npm install
     ```
 
-3.  **Rode o servidor de desenvolvimento:**
+3.  **Configuração de Ambiente:**
+    Crie um arquivo chamado `.env.local` na raiz do projeto e adicione suas chaves do Supabase:
+    ```env
+    NEXT_PUBLIC_SUPABASE_URL=sua_url_aqui
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anon_aqui
+    ```
+
+4.  **Rode o servidor:**
     ```bash
     npm run dev
     ```
 
-4.  Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
-
 ## 📂 Estrutura do Projeto
 
-* **`app/`**: Contém as páginas (`page.tsx`) e o layout global.
-    * **`components/`**: Componentes reutilizáveis (Header, Hero, Services, etc.).
-* **`public/assets/`**: Onde ficam todas as imagens (`img/`) e vídeos estáticos.
-* **`app/globals.css`**: Configurações globais de estilo e variáveis de tema.
+*   **`app/admin/`**: Todo o ecossistema do painel administrativo (Login, Dashboard, Equipe, FAQ).
+*   **`app/components/`**: Componentes reutilizáveis de interface.
+*   **`lib/`**: Configurações de serviços externos (Cliente do Supabase).
+*   **`public/assets/`**: Imagens e vídeos estáticos da marca.
 
 ## 🎨 Personalização
 
-* **Imagens:** Substitua os arquivos na pasta `public/assets/img` mantendo os mesmos nomes ou atualize os caminhos nos componentes (ex: `app/components/Team.tsx`).
-* **Cores:** As cores da marca (`black-arch`, `areia-suave`, etc.) estão configuradas como variáveis CSS no arquivo `app/globals.css`.
+*   **Cores:** O tema utiliza as variáveis CSS `black-arch` e `areia-suave` definidas em `app/globals.css`.
+*   **Segurança:** Todas as tabelas no Supabase possuem políticas de **RLS** ativadas para garantir que apenas o administrador possa alterar os dados.
 
 ---
+Desenvolvido para o Projeto de Extensão II - Linna Arquitetura.
