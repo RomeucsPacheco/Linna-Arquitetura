@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@theme {
+  /* --- MUDANÇA: Agora as cores apontam para variáveis (var) --- */
+  /* Isso permite que elas mudem de valor quando trocamos o tema */
+  --color-off-white: var(--off-white);
+  --color-areia-suave: var(--areia-suave);
+  --color-terracota: var(--terracota);
+  --color-ambar: var(--ambar);
+  --color-black-arch: var(--black-arch);
+  --color-cinza-escuro: var(--cinza-escuro);
+  --color-cinza-medio: var(--cinza-medio);
+  --color-cinza-claro: var(--cinza-claro);
+
+  /* --- Configuração da Fonte (Mantida) --- */
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* --- DEFINIÇÃO DOS TEMAS --- */
+
+/* 1. TEMA ESCURO (Padrão/Original) */
+:root {
+  --background: #0C0C0C;
+  --foreground: #F2F2F2;
+
+  /* Suas cores originais */
+  --off-white: #F2F2F2;
+  --areia-suave: #D5D1C8;
+  --terracota: #B08775;
+  --ambar: #C85238;
+  --black-arch: #0C0C0C;
+  --cinza-escuro: #1a1a1a;
+  --cinza-medio: #222222;
+  --cinza-claro: #333333;
+}
+
+/* 2. TEMA CLARO (Inversão inteligente) */
+:root[class="light"] {
+  --background: #F2F2F2;
+  --foreground: #0C0C0C;
+
+  /* Cores invertidas para o modo claro */
+  --off-white: #1a1a1a;       /* Texto vira escuro */
+  --areia-suave: #B08775;     /* Acentuação fica mais forte para contraste */
+  --terracota: #D5D1C8;
+  --ambar: #C85238;
+  --black-arch: #FFFFFF;      /* Fundo principal vira branco */
+  --cinza-escuro: #F4F4F5;    /* Seções alternadas viram cinza bem claro */
+  --cinza-medio: #E4E4E7;     /* Cards viram cinza claro */
+  --cinza-claro: #D4D4D8;     /* Bordas um pouco mais visíveis */
+}
+
+/* --- SEUS ESTILOS GLOBAIS (MANTIDOS) --- */
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: subpixel-antialiased; /* Mantido */
+  
+  /* Adicionei transição para o tema trocar suavemente */
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+html {
+  scroll-behavior: smooth; /* Mantido */
+}
+
+/* Barra de rolagem estilizada (Mantida) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cinza-escuro); /* Atualizado para usar variável */
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cinza-claro);  /* Atualizado para usar variável */
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--areia-suave);  /* Atualizado para usar variável */
+}
+
+/* ========================================= */
+/* ANIMAÇÃO CARROSSEL INFINITO (MANTIDO)     */
+/* ========================================= */
+@keyframes scrollInfinito {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.pause-hover:hover {
+  animation-play-state: paused;
+}
+
+/* ======================================= */
+/* ====   REMOVE O ÍCONE 'N' DO NEXT   ==== */
+/* ======================================= */
+[data-nextjs-toast],
+[data-nextjs-toast-errors-parent],
+div[class*="nextjs-toast"],
+div[class*="build-activity"],
+nextjs-portal {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    z-index: -9999 !important;
+}
