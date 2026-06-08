@@ -6,6 +6,18 @@ const nextConfig: any = {
     appIsrStatus: false, // Indicador de estático
     buildActivity: false, // Indicador de compilação (o raiozinho/N)
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

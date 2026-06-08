@@ -20,13 +20,19 @@ export default function NovoMembro() {
 
         // Upload da foto de perfil (se houver)
         if (foto) {
-            const fileName = `equipe/${Date.now()}-${foto.name}`
-            const { data: uploadData } = await supabase.storage
-            .from('fotos-projetos') //usando o mesmo bucket por simplicidade
+            const fileName = `${Date.now()}-${foto.name}`
+            const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('equipe')
             .upload(fileName, foto)
 
+            if (uploadError) {
+                alert("Erro ao fazer upload da foto: " + uploadError.message);
+                setLoading(false);
+                return;
+            }
+
             if (uploadData) {
-                const { data } = supabase.storage.from('fotos-projetos').getPublicUrl(fileName)
+                const { data } = supabase.storage.from('equipe').getPublicUrl(fileName)
                 urlPublica = data.publicUrl
             }
         }

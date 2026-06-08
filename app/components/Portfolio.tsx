@@ -3,30 +3,45 @@
 import { motion } from "framer-motion";
 import Image from "next/image"; // Componente otimizado do Next.js
 import Link from "next/link";
-
-// Dados dos projetos (Deixei 3 itens para simular o seu caso)
-const projetos = [
-  {
-    id: 1,
-    title: "Barbearia Zucco",
-    image: "/assets/img/projetos/projeto1.jpg", 
-    category: "Comercial"
-  },
-  {
-    id: 2,
-    title: "RF House",
-    image: "/assets/img/projetos/projeto2.jpg",
-    category: "Residencial"
-  },
-  {
-    id: 3,
-    title: "Garajão do Dog",
-    image: "/assets/img/projetos/projeto3.jpg",
-    category: "Interiores"
-  },
-];
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Portfolio() {
+  const [projetos, setProjetos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLatestProjects() {
+      // Busca os projetos mais recentes
+      const { data: projetosData } = await supabase
+        .from('projeto')
+        .select('*')
+        .order('data_projeto', { ascending: false })
+        .limit(4);
+
+      if (projetosData && projetosData.length > 0) {
+        // Busca a primeira foto de cada projeto para usar como capa
+        const { data: fotosData } = await supabase
+          .from('foto_projeto')
+          .select('*')
+          .in('projeto_id', projetosData.map(p => p.id))
+          .order('id', { ascending: true });
+
+        const projetosComFotos = projetosData.map(p => {
+          const fotosProjeto = fotosData?.filter(f => f.projeto_id === p.id) || [];
+          return {
+            ...p,
+            image: fotosProjeto.length > 0 ? fotosProjeto[0].url : "/assets/img/projetos/projeto1.jpg" // fallback image
+          };
+        });
+
+        setProjetos(projetosComFotos);
+      }
+      setLoading(false);
+    }
+    fetchLatestProjects();
+  }, []);
+
   return (
     <section id="portfolio" className="bg-black-arch py-20 px-6">
       <div className="container mx-auto max-w-[1100px]">
@@ -68,49 +83,59 @@ export default function Portfolio() {
 
         {/* === GRID DE PROJETOS (CENTRALIZADO AUTOMATICAMENTE) === */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {projetos.map((projeto, index) => {
-            
-            // LÓGICA INTELIGENTE:
-            // Verifica se é o último item E se o total é ímpar
-            const isLastOdd = index === projetos.length - 1 && projetos.length % 2 !== 0;
+          {loading ? (
+            <div className="col-span-full text-center text-off-white/70 py-10">
+              Carregando projetos...
+            </div>
+          ) : projetos.length === 0 ? (
+            <div className="col-span-full text-center text-off-white/70 py-10">
+              Nenhum projeto encontrado.
+            </div>
+          ) : (
+            projetos.map((projeto, index) => {
+              
+              // LÓGICA INTELIGENTE:
+              // Verifica se é o último item E se o total é ímpar
+              const isLastOdd = index === projetos.length - 1 && projetos.length % 2 !== 0;
 
-            return (
-              <motion.div
-                key={projeto.id}
-                // Se for o último ímpar:
-                // md:col-span-2 -> Ocupa a linha toda (para podermos centralizar)
-                // md:w-[calc(50%-12px)] -> Força a largura a ser igual a de um card normal (50% menos metade do gap)
-                // md:mx-auto -> Centraliza na linha
-                className={`group relative h-[350px] w-full rounded-lg overflow-hidden cursor-pointer
-                  ${isLastOdd ? "md:col-span-2 md:w-[calc(50%-12px)] md:mx-auto" : ""}
-                `}
-                
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-              >
-                {/* Imagem */}
-                <Image 
-                  src={projeto.image}
-                  alt={projeto.title}
-                  fill 
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
+              return (
+                <motion.div
+                  key={projeto.id}
+                  // Se for o último ímpar:
+                  // md:col-span-2 -> Ocupa a linha toda (para podermos centralizar)
+                  // md:w-[calc(50%-12px)] -> Força a largura a ser igual a de um card normal (50% menos metade do gap)
+                  // md:mx-auto -> Centraliza na linha
+                  className={`group relative h-[350px] w-full rounded-lg overflow-hidden cursor-pointer
+                    ${isLastOdd ? "md:col-span-2 md:w-[calc(50%-12px)] md:mx-auto" : ""}
+                  `}
+                  
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                >
+                  {/* Imagem */}
+                  <Image 
+                    src={projeto.image}
+                    alt={projeto.titulo}
+                    fill 
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
-                  <h4 className="text-2xl font-bold text-off-white translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 uppercase tracking-wider">
-                    {projeto.title}
-                  </h4>
-                  <span className="text-areia-suave text-sm mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">
-                    {projeto.category}
-                  </span>
-                </div>
-              </motion.div>
-            );
-          })}
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
+                    <h4 className="text-2xl font-bold text-off-white translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 uppercase tracking-wider text-center px-4">
+                      {projeto.titulo}
+                    </h4>
+                    <span className="text-areia-suave text-sm mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">
+                      {projeto.localizacao || "Projeto"}
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })
+          )}
         </div>
 
         {/* === BOTÃO "VER TODOS" === */}

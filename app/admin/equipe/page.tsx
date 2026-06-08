@@ -22,13 +22,35 @@ export default function ListarEquipe() {
             setLoading(false)
     }
 
-    async function handleDelete(id: number, nome: string) {
-        const confirmar = confirm(`Tem certeza que deseja remover ${nome} da equipe?`);
+    async function handleDelete(membro: any) {
+        const confirmar = confirm(`Tem certeza que deseja remover ${membro.nome} da equipe?`);
         if (confirmar) {
+            // Remove a foto do storage, se existir
+            if (membro.foto_url) {
+                try {
+                    let filePath = membro.foto_url.split('/public/equipe/')[1];
+                    let bucketName = 'equipe';
+                    
+                    if (!filePath) {
+                        // Tenta pelo bucket antigo caso a foto seja da versão anterior
+                        filePath = membro.foto_url.split('/public/fotos-projetos/')[1];
+                        bucketName = 'fotos-projetos';
+                    }
+
+                    if (filePath) {
+                        // Decodifica a URL para lidar com espaços e caracteres especiais no nome do arquivo
+                        const decodedPath = decodeURIComponent(filePath);
+                        await supabase.storage.from(bucketName).remove([decodedPath]);
+                    }
+                } catch (e) {
+                    console.error("Erro ao deletar foto do storage", e);
+                }
+            }
+
             const { error } = await supabase
             .from('membro_equipe')
             .delete()
-            .eq('id', id);
+            .eq('id', membro.id);
 
             if (error) {
                 alert("Erro ao excluir: " + error.message);
@@ -45,12 +67,20 @@ export default function ListarEquipe() {
           <h1 className="text-2xl font-bold text-black">Membros da Equipe</h1>
           <p className="text-gray-500 text-sm">Gerencie quem aparece no site</p>
         </div>
-        <Link 
-          href="/admin/equipe/novo" 
-          className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
-        >
-          + Adicionar Membro
-        </Link>
+        <div className="flex gap-4">
+            <Link 
+            href="/admin/dashboard" 
+            className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+            >
+            Voltar
+            </Link>
+            <Link 
+            href="/admin/equipe/novo" 
+            className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
+            >
+            + Adicionar Membro
+            </Link>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
@@ -93,7 +123,7 @@ export default function ListarEquipe() {
                   </td>
                   <td className="p-4 text-center space-x-3">
                     <Link href={`/admin/equipe/editar/${membro.id}`} className="text-blue-600 hover:underline text-sm font-medium">Editar</Link>
-                    <button onClick={() => handleDelete(membro.id, membro.nome)} className="text-red-600 hover:underline text-sm font-medium">Excluir</button>
+                    <button onClick={() => handleDelete(membro)} className="text-red-600 hover:underline text-sm font-medium">Excluir</button>
                   </td>
                 </tr>
               ))

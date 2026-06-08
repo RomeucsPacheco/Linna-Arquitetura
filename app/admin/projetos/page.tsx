@@ -24,6 +24,38 @@ export default function ListarProjetos() {
       const confirmar =  confirm(`Deseja excluir o projeto "${titulo}"? Todas as fotos vinculadas também serão removidas.`);
 
       if (confirmar) {
+        try {
+            // 1. Buscar todas as fotos vinculadas ao projeto
+            const { data: fotos } = await supabase
+                .from('foto_projeto')
+                .select('url')
+                .eq('projeto_id', id);
+            
+            // 2. Extrair os caminhos e deletar do storage
+            if (fotos && fotos.length > 0) {
+                const filesToRemove = fotos.map(f => {
+                    const path = f.url.split('/public/fotos-projeto/')[1];
+                    return path ? decodeURIComponent(path) : null;
+                }).filter(Boolean) as string[];
+                
+                if (filesToRemove.length > 0) {
+                    await supabase.storage.from('fotos-projeto').remove(filesToRemove);
+                }
+
+                // Fallback para caso as fotos estivessem no bucket plural
+                const filesToRemoveOldBucket = fotos.map(f => {
+                    const path = f.url.split('/public/fotos-projetos/')[1];
+                    return path ? decodeURIComponent(path) : null;
+                }).filter(Boolean) as string[];
+
+                if (filesToRemoveOldBucket.length > 0) {
+                    await supabase.storage.from('fotos-projetos').remove(filesToRemoveOldBucket);
+                }
+            }
+        } catch (e) {
+            console.error("Erro ao deletar fotos do storage:", e);
+        }
+
         const { error } = await supabase
         .from('projeto')
         .delete()
@@ -43,12 +75,20 @@ export default function ListarProjetos() {
     <div className="p-10 bg-[#F5F5F0] min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-black bg-white focus:ring-2 focus:ring-[#D4C3A1] outline-none">Gerenciar Projetos</h1>
-        <Link 
-          href="/admin/projetos/novo" 
-          className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
-        >
-          + Novo Projeto
-        </Link>
+        <div className="flex gap-4">
+            <Link 
+            href="/admin/dashboard" 
+            className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+            >
+            Voltar
+            </Link>
+            <Link 
+            href="/admin/projetos/novo" 
+            className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
+            >
+            + Novo Projeto
+            </Link>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 text-black bg-white focus:ring-2 focus:ring-[#D4C3A1] outline-none">

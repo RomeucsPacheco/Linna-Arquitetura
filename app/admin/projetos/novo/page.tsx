@@ -9,6 +9,7 @@ export default function NovoProjeto() {
     const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({ titulo: '', localizacao: '', data: '', descricao: '', comentario: ''})
     const [files, setFiles] = useState<File[]>([])
+    const [coverIndex, setCoverIndex] = useState(0) // Estado para armazenar o índice da capa
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -33,9 +34,16 @@ export default function NovoProjeto() {
                 return;
             }
 
+            // Reorganiza as fotos para que a capa seja a primeira do array
+            const orderedFiles = [...files];
+            if (coverIndex > 0 && coverIndex < orderedFiles.length) {
+                const cover = orderedFiles.splice(coverIndex, 1)[0];
+                orderedFiles.unshift(cover);
+            }
+
             //uploado das fotos (RF08)
 
-            for (const file of files) {
+            for (const file of orderedFiles) {
                 const fileName = `${Date.now()}-${file.name}`
                 const { data: uploadData, error: uError} = await supabase.storage
                     .from('fotos-projeto')
@@ -43,7 +51,7 @@ export default function NovoProjeto() {
 
                     if(uploadData) {
                         //pega a URL pública da foto
-                        const { data: urlData } = supabase.storage.from('fotos-projetos').getPublicUrl(fileName)
+                        const { data: urlData } = supabase.storage.from('fotos-projeto').getPublicUrl(fileName)
 
                         //salvar a url na tabela de fotos viculada ao projeto
                         await supabase.from('foto_projeto').insert([{
@@ -91,9 +99,42 @@ export default function NovoProjeto() {
             type="file" 
             multiple 
             accept="image/*"
-            onChange={e => setFiles(Array.from(e.target.files || []))}
+            onChange={e => {
+                setFiles(Array.from(e.target.files || []));
+                setCoverIndex(0); // Reseta a capa para a primeira foto ao selecionar novas
+            }}
           />
         </div>
+
+        {files.length > 0 && (
+          <div className="bg-white p-4 border rounded shadow-sm text-black">
+            <p className="font-bold mb-3">Escolha a Foto de Capa:</p>
+            <p className="text-sm text-gray-500 mb-4">Esta foto será a principal na página inicial e a primeira no portfólio.</p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+              {files.map((file, index) => {
+                const isCover = index === coverIndex;
+                return (
+                  <div 
+                    key={index} 
+                    onClick={() => setCoverIndex(index)}
+                    className={`relative cursor-pointer rounded overflow-hidden border-4 transition-all h-24 ${isCover ? 'border-[#D4C3A1] scale-105' : 'border-transparent hover:border-gray-300'}`}
+                  >
+                    <img 
+                      src={URL.createObjectURL(file)} 
+                      alt={`Preview ${index}`} 
+                      className="w-full h-full object-cover"
+                    />
+                    {isCover && (
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <span className="text-white font-bold text-xs uppercase bg-[#D4C3A1] px-2 py-1 rounded">Capa</span>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-4">
           <button type="submit" disabled={loading} className="bg-black text-white px-6 py-2 rounded">

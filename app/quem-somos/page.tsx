@@ -1,12 +1,32 @@
 "use client"; // <--- ADICIONE ESTA LINHA (Ela resolve o erro)
 
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import FloatingWhatsApp from "../components/FloatingWhatsapp";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function QuemSomos() {
+  const [team, setTeam] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTeam() {
+      const { data } = await supabase
+        .from('membro_equipe')
+        .select('*')
+        .order('id', { ascending: true }); // or some other order
+
+      if (data) {
+        setTeam(data);
+      }
+      setLoading(false);
+    }
+    fetchTeam();
+  }, []);
+
   return (
     <main className="min-h-screen bg-black-arch text-off-white">
       <Header />
@@ -25,47 +45,34 @@ export default function QuemSomos() {
             Quem Somos
           </motion.h3>
 
-          {/* Grid da Equipe (Bruna e Marielen) */}
-          <div className="flex flex-col md:flex-row justify-center gap-10 md:gap-16 mb-16">
-            
-            {/* Bruna */}
-            <motion.div 
-              className="flex flex-col items-center"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden border-[3px] border-cinza-claro mb-6">
-                <Image 
-                  src="/assets/img/pessoas/bruna.jpeg" 
-                  alt="Bruna" 
-                  fill 
-                  className="object-cover hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <h4 className="text-xl font-bold text-off-white mb-1">Bruna</h4>
-              <p className="text-areia-suave">Arquiteta e sócia-fundadora</p>
-            </motion.div>
-
-            {/* Marielen */}
-            <motion.div 
-              className="flex flex-col items-center"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden border-[3px] border-cinza-claro mb-6">
-                <Image 
-                  src="/assets/img/pessoas/marielen.jpeg" 
-                  alt="Marielen" 
-                  fill 
-                  className="object-cover hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <h4 className="text-xl font-bold text-off-white mb-1">Marielen</h4>
-              <p className="text-areia-suave">Designer e sócia-fundadora</p>
-            </motion.div>
-
+          {/* Grid da Equipe */}
+          <div className="flex flex-wrap justify-center gap-10 md:gap-16 mb-16">
+            {loading ? (
+              <p className="text-center text-off-white/70">Carregando equipe...</p>
+            ) : team.length === 0 ? (
+              <p className="text-center text-off-white/70">Nenhum membro da equipe encontrado.</p>
+            ) : (
+              team.map((member, index) => (
+                <motion.div 
+                  key={member.id || index}
+                  className="flex flex-col items-center"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 + (index * 0.1) }}
+                >
+                  <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden border-[3px] border-cinza-claro mb-6 bg-black-arch">
+                    <Image 
+                      src={member.foto_url || "/favicon.png"} 
+                      alt={member.nome} 
+                      fill 
+                      className="object-cover hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <h4 className="text-xl font-bold text-off-white mb-1">{member.nome}</h4>
+                  <p className="text-areia-suave text-center max-w-[280px]">{member.cargo}</p>
+                </motion.div>
+              ))
+            )}
           </div>
 
           {/* Texto História */}

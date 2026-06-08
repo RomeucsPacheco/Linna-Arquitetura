@@ -44,13 +44,19 @@ export default function EditarMembro() {
 
         //Se selecionou uma foto nova, faz o upload
         if (novaFoto) {
-            const fileName = `equipe/${Date.now()}${novaFoto.name}`
-            const { data: uploadData } = await supabase.storage
-            .from('fotos-projetos')
+            const fileName = `${Date.now()}-${novaFoto.name}`
+            const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('equipe')
             .upload(fileName, novaFoto)
             
+            if (uploadError) {
+                alert("Erro ao fazer upload da foto: " + uploadError.message);
+                setLoading(false);
+                return;
+            }
+
             if (uploadData) {
-                const { data } = supabase.storage.from('fotos-projetos').getPublicUrl(fileName)
+                const { data } = supabase.storage.from('equipe').getPublicUrl(fileName)
                 urlFinal = data.publicUrl
             }
         }
