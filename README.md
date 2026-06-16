@@ -1,8 +1,10 @@
 # 🏛️ Linna Arquitetura - Painel Administrativo & Website
 
+🟢 **Status:** Em Produção | 🔗 **Acesse o site oficial:** [archforbusiness.com](https://archforbusiness.com)
+
 > "Espaços que inspiram pessoas."
 
-Este projeto evoluiu de um site estático para uma **Aplicação Web Full Stack** de alta performance. Agora, além do frontend cinematográfico, a Linna Arquitetura possui um **Painel Administrativo** completo para gestão de conteúdo em tempo real.
+Este projeto evoluiu de um site estático para uma **Aplicação Web Full Stack** de alta performance. Agora, além do frontend cinematográfico, a Linna Arquitetura possui um **Painel Administrativo** completo para gestão de conteúdo em tempo real e já se encontra oficialmente no ar.
 
 ## 🚀 Tecnologias (The Modern Full Stack)
 
