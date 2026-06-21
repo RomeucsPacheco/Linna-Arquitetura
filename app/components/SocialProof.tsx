@@ -1,5 +1,7 @@
 "use client";
 
+import Marquee from "react-fast-marquee";
+
 // Lista de logos (Uma lista simples)
 const logos = [
   "/assets/img/empresas/bandcalcados.png",
@@ -37,15 +39,16 @@ export default function SocialProof() {
         </h4>
       </div>
 
-      {/* Carrossel Infinito Simples */}
-      <div className="relative w-full overflow-hidden">
-        {/* Usa a animação CSS puro 'scrollInfinito' definida no globals.css */}
-        <div 
-            className="flex items-center gap-16 min-w-max pause-hover"
-            style={{ animation: "scrollInfinito 60s linear infinite" }}
+      {/* Carrossel Infinito com react-fast-marquee */}
+      <div className="relative w-full overflow-hidden py-4">
+        <Marquee 
+          gradient={false} 
+          speed={40} 
+          pauseOnHover={true}
+          className="overflow-hidden"
         >
-          {[...logos, ...logos].map((logo, index) => (
-            <div key={index} className="relative flex items-center justify-center px-4">
+          {logos.map((logo, index) => (
+            <div key={index} className="mx-8 relative flex items-center justify-center px-4">
               <img
                 src={logo}
                 alt={`Logo Cliente ${index}`}
@@ -53,7 +56,7 @@ export default function SocialProof() {
               />
             </div>
           ))}
-        </div>
+        </Marquee>
       </div>
     </section>
   );

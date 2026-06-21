@@ -56,6 +56,7 @@ export default function DashBoardPage() {
                     <Link href="/admin/projetos" className="w-full text-left hover:text-[#D4C3A1] transition-colors block">Projetos</Link>
                     <Link href="/admin/equipe" className="w-full text-left hover:text-[#D4C3A1] transition-colors block">Equipe</Link>
                     <Link href="/admin/faq" className="w-full text-left hover:text-[#D4C3A1] transition-colors block">FAQ</Link>
+                    <Link href="/admin/capa" className="w-full text-left hover:text-[#D4C3A1] transition-colors block">Capa do Site</Link>
                 </nav>
                 <button 
                     onClick={handleLogout}

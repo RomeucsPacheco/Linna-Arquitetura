@@ -99,6 +99,7 @@ export default function NovoProjeto() {
             type="file" 
             multiple 
             accept="image/*"
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#D4C3A1] outline-none"
             onChange={e => {
                 setFiles(Array.from(e.target.files || []));
                 setCoverIndex(0); // Reseta a capa para a primeira foto ao selecionar novas

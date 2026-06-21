@@ -92,7 +92,7 @@ export default function NovoMembro() {
             type="file" 
             accept="image/*" 
             onChange={e => setFoto(e.target.files ? e.target.files[0] : null)}
-            className="mt-1 block w-full text-sm text-gray-500"
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#D4C3A1] outline-none"
           />
         </div>
 

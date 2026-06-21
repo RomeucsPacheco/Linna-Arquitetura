@@ -101,7 +101,7 @@ export default function EditarMembro() {
         <div>
           <label className="block text-sm font-medium text-gray-700">Foto Atual</label>
           {fotoUrl && <img src={fotoUrl} alt="Atual" className="w-20 h-20 rounded-full mb-2 object-cover" />}
-          <input type="file" accept="image/*" onChange={e => setNovaFoto(e.target.files ? e.target.files[0] : null)} className="text-sm" />
+          <input type="file" accept="image/*" onChange={e => setNovaFoto(e.target.files ? e.target.files[0] : null)} className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#D4C3A1] outline-none" />
         </div>
 
         <div className="flex gap-4 pt-4">

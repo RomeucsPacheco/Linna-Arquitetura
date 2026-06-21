@@ -1,8 +1,27 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Hero() {
+  const [backgroundUrl, setBackgroundUrl] = useState("/assets/img/background-banner.png");
+
+  useEffect(() => {
+    async function fetchBackground() {
+      const { data, error } = await supabase
+        .from("hero_capa")
+        .select("imagem_url")
+        .eq("id", 1)
+        .single();
+      
+      if (data && data.imagem_url) {
+        setBackgroundUrl(data.imagem_url);
+      }
+    }
+    fetchBackground();
+  }, []);
+
   return (
     <>
       {/* ======================================= */}
@@ -14,7 +33,7 @@ export default function Hero() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 z-10" />
           <motion.img
-            src="/assets/img/background-banner.png" 
+            src={backgroundUrl} 
             alt="Background"
             className="w-full h-full object-cover"
             initial={{ scale: 1.1, opacity: 0.8 }}
@@ -76,12 +95,12 @@ export default function Hero() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.4 }}
             >
-                <iframe 
+                <video 
                     className="absolute top-0 left-0 w-full h-full"
                     src="/assets/video/ManifestoHorizontal.mp4" 
-                    frameBorder="0" 
-                    allowFullScreen
-                ></iframe>
+                    controls
+                    preload="metadata"
+                ></video>
             </motion.div>
 
         </div>
