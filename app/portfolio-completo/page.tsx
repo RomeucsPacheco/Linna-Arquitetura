@@ -158,7 +158,7 @@ export default function PortfolioCompleto() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-bold text-off-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-title font-bold text-off-white mb-6">
               Nosso Portfólio
             </h1>
             <p className="text-lg text-areia-suave max-w-2xl mx-auto">
@@ -194,10 +194,10 @@ export default function PortfolioCompleto() {
                   {/* LADO DO TEXTO */}
                   <div className="w-full md:w-1/2 text-left flex flex-col justify-center space-y-6">
                     <div>
-                      <span className="text-areia-suave text-sm font-bold tracking-widest uppercase mb-2 block">
+                      <span className="text-areia-suave text-sm font-title font-bold tracking-widest uppercase mb-2 block">
                         {project.localizacao ? `${project.localizacao}` : "Projeto"}
                       </span>
-                      <h2 className="text-3xl md:text-4xl font-bold text-off-white">
+                      <h2 className="text-3xl md:text-4xl font-title font-bold text-off-white">
                         {project.titulo}
                       </h2>
                     </div>

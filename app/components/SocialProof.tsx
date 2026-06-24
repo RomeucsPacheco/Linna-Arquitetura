@@ -32,7 +32,7 @@ export default function SocialProof() {
       
       {/* Título Estilo Antigo (Centralizado e Simples) */}
       <div className="container mx-auto text-center mb-10">
-        <h4 className="text-xl md:text-2xl font-bold text-black-arch relative inline-block pb-3">
+        <h4 className="text-xl md:text-2xl font-title font-bold text-black-arch relative inline-block pb-3">
           Marcas que confiam em nosso trabalho
           {/* Linha pequena abaixo */}
           <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-[3px] bg-ambar rounded-full"></span>

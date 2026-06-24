@@ -12,8 +12,9 @@
   --color-cinza-medio: var(--cinza-medio);
   --color-cinza-claro: var(--cinza-claro);
 
-  /* --- Configuração da Fonte (Mantida) --- */
-  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  /* --- Configuração da Fonte --- */
+  --font-sans: var(--font-sans-custom), ui-sans-serif, system-ui, sans-serif;
+  --font-title: var(--font-title), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* --- DEFINIÇÃO DOS TEMAS --- */

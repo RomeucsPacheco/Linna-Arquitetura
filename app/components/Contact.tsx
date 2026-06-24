@@ -12,7 +12,7 @@ export default function Contact() {
           {/* Coluna Esquerda */}
           <div className="text-center md:text-left">
             <motion.h3 
-              className="text-2xl text-areia-suave font-semibold uppercase tracking-wider mb-4"
+              className="text-2xl font-title text-areia-suave font-semibold uppercase tracking-wider mb-4"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }} // <--- CORRIGIDO
@@ -22,7 +22,7 @@ export default function Contact() {
             </motion.h3>
             
             <motion.h2 
-              className="text-3xl md:text-5xl font-bold text-off-white mb-6 leading-tight"
+              className="text-3xl md:text-5xl font-title font-bold text-off-white mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} // <--- CORRIGIDO
@@ -89,7 +89,7 @@ function ContactCard({ href, icon, title, text, delay }: { href: string, icon: a
         {icon}
       </div>
       <div>
-        <h4 className="text-lg font-semibold text-off-white mb-1">{title}</h4>
+        <h4 className="text-lg font-title font-semibold text-off-white mb-1">{title}</h4>
         <p className="text-areia-suave/90 text-sm">{text}</p>
       </div>
     </motion.a>

@@ -37,7 +37,7 @@ export default function QuemSomos() {
           
           {/* Título */}
           <motion.h3 
-            className="text-3xl md:text-[2.5em] font-bold text-off-white mb-12"
+            className="text-3xl md:text-[2.5em] font-title font-bold text-off-white mb-12"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -68,7 +68,7 @@ export default function QuemSomos() {
                       className="object-cover hover:scale-110 transition-transform duration-500"
                     />
                   </div>
-                  <h4 className="text-xl font-bold text-off-white mb-1">{member.nome}</h4>
+                  <h4 className="text-xl font-title font-bold text-off-white mb-1">{member.nome}</h4>
                   <p className="text-areia-suave text-center max-w-[280px]">{member.cargo}</p>
                 </motion.div>
               ))

@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google"; 
+import localFont from "next/font/local";
 import "./globals.css";
 
-// Configurando a Montserrat
-const montserrat = Montserrat({ 
-  subsets: ["latin"],
-  weight: ["400", "600", "700"], 
-  variable: "--font-montserrat", // Essa variável é lida lá no CSS novo
+// Fonte para títulos e destaques
+const spaceGrotesk = localFont({
+  src: "../public/fonts/Para títulos e textos de destaque/SpaceGrotesk-VariableFont_wght.ttf",
+  variable: "--font-title",
+});
+
+// Fonte para subtítulos e textos corridos
+const almarenaMono = localFont({
+  src: "../public/fonts/Para subtítulos e textos corridos/almarena-mono-light.otf",
+  variable: "--font-sans-custom",
 });
 
 export const metadata: Metadata = {
@@ -26,8 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      {/* Aqui aplicamos a variável da fonte e a cor de fundo */}
-      <body className={`${montserrat.variable} font-sans bg-black-arch text-off-white antialiased`}>
+      {/* Aqui aplicamos as variáveis das fontes locais e a cor de fundo */}
+      <body className={`${almarenaMono.variable} ${spaceGrotesk.variable} font-sans bg-black-arch text-off-white antialiased`}>
         {children}
       </body>
     </html>

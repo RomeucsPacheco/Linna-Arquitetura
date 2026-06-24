@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function Hero() {
-  const [backgroundUrl, setBackgroundUrl] = useState("/assets/img/background-banner.png");
+  const [backgroundUrl, setBackgroundUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBackground() {
@@ -17,6 +17,8 @@ export default function Hero() {
       
       if (data && data.imagem_url) {
         setBackgroundUrl(data.imagem_url);
+      } else {
+        setBackgroundUrl("/assets/img/background-banner.png");
       }
     }
     fetchBackground();
@@ -30,16 +32,18 @@ export default function Hero() {
       <section id="banner-inicial" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
         
         {/* Background Ken Burns */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 bg-black-arch">
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 z-10" />
-          <motion.img
-            src={backgroundUrl} 
-            alt="Background"
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.1, opacity: 0.8 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 20, ease: "easeOut" }}
-          />
+          {backgroundUrl && (
+            <motion.img
+              src={backgroundUrl} 
+              alt="Background"
+              className="w-full h-full object-cover"
+              initial={{ scale: 1.1, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 20, ease: "easeOut" }}
+            />
+          )}
         </div>
 
         {/* Logo Central */}
@@ -66,7 +70,7 @@ export default function Hero() {
             
             {/* Título */}
             <motion.h2 
-                className="text-3xl md:text-5xl font-bold text-off-white mb-6 leading-tight"
+                className="text-3xl md:text-5xl font-title font-bold text-off-white mb-6 leading-tight"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

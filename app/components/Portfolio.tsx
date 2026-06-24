@@ -51,7 +51,7 @@ export default function Portfolio() {
           
           <div className="flex items-center gap-6 mb-3"> 
             <motion.h3 
-              className="text-3xl md:text-4xl font-bold text-off-white shrink-0"
+              className="text-3xl md:text-4xl font-title font-bold text-off-white shrink-0"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -125,7 +125,7 @@ export default function Portfolio() {
 
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center">
-                    <h4 className="text-2xl font-bold text-off-white translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 uppercase tracking-wider text-center px-4">
+                    <h4 className="text-2xl font-title font-bold text-off-white translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 uppercase tracking-wider text-center px-4">
                       {projeto.titulo}
                     </h4>
                     <span className="text-areia-suave text-sm mt-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">
@@ -142,7 +142,7 @@ export default function Portfolio() {
         <div className="text-center">
           <Link href="/portfolio-completo">
             <motion.button
-              className="px-8 py-3 border border-areia-suave text-areia-suave uppercase tracking-widest text-sm font-semibold hover:bg-areia-suave hover:text-black-arch transition-all duration-300 rounded-[4px]"
+              className="px-8 py-3 border border-areia-suave font-title text-areia-suave uppercase tracking-widest text-sm font-semibold hover:bg-areia-suave hover:text-black-arch transition-all duration-300 rounded-[4px]"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

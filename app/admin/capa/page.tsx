@@ -42,6 +42,15 @@ export default function GerenciarCapa() {
         setLoading(true)
 
         try {
+            // 0. Apagar a capa antiga do Storage para manter limpo
+            if (capaAtual && capaAtual.includes('/storage/v1/object/public/capas/')) {
+                const oldFileName = capaAtual.split('/').pop()
+                if (oldFileName) {
+                    // Tenta remover a imagem antiga do storage
+                    await supabase.storage.from('capas').remove([oldFileName])
+                }
+            }
+
             // 1. Fazer upload para o Storage
             const fileExt = novaCapa.name.split('.').pop()
             const fileName = `${Date.now()}.${fileExt}`

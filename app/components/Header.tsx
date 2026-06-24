@@ -77,7 +77,7 @@ export default function Header() {
                 href={item.href}
                 className="
                   block px-[12px] py-[8px] 
-                  text-[15px] font-semibold tracking-widest text-off-white uppercase
+                  text-[15px] font-title font-semibold tracking-widest text-off-white uppercase
                   border border-transparent rounded-none subpixel-antialiased
                   transition-all duration-300
                   hover:border-off-white hover:text-white
@@ -116,7 +116,7 @@ export default function Header() {
                 key={item.name}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-2xl text-off-white uppercase font-bold tracking-widest hover:text-areia-suave transition-colors"
+                className="text-2xl font-title text-off-white uppercase font-bold tracking-widest hover:text-areia-suave transition-colors"
               >
                 {item.name}
               </Link>

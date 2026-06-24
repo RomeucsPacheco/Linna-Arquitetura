@@ -34,7 +34,7 @@ export default function Services() {
           />
 
           <motion.h3 
-            className="text-3xl md:text-[2.5em] font-bold text-off-white"
+            className="text-3xl md:text-[2.5em] font-title font-bold text-off-white"
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} // <--- CORRIGIDO
@@ -65,7 +65,7 @@ export default function Services() {
               transition={{ delay: index * 0.1, duration: 0.5 }}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <h4 className="text-xl font-bold text-off-white mb-4">{item.title}</h4>
+              <h4 className="text-xl font-title font-bold text-off-white mb-4">{item.title}</h4>
               <p className="text-areia-suave leading-relaxed text-[0.95rem]">
                 {item.description}
               </p>

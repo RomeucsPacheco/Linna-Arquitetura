@@ -38,7 +38,7 @@ export default function Method() {
       <div className="container mx-auto text-center h-auto md:h-[700px] flex flex-col justify-between">
         
         <div className="mb-8 md:mb-4 relative z-10 flex justify-center">
-            <h3 className="text-2xl md:text-[2.5em] font-bold text-off-white flex items-center gap-4">
+            <h3 className="text-2xl md:text-[2.5em] font-title font-bold text-off-white flex items-center gap-4">
                 Nosso Método
                 <span className="inline-block w-2 h-2 md:w-3 md:h-3 border-t-[3px] border-r-[3px] border-areia-suave rotate-45 mt-1" />
             </h3>
@@ -70,8 +70,8 @@ export default function Method() {
                     opacity: opacity
                   }}
                 >
-                  <span className="block text-4xl font-bold text-areia-suave mb-4">{step.number}</span>
-                  <h4 className="text-xl font-semibold text-off-white mb-4">{step.title}</h4>
+                  <span className="block text-4xl font-title font-bold text-areia-suave mb-4">{step.number}</span>
+                  <h4 className="text-xl font-title font-semibold text-off-white mb-4">{step.title}</h4>
                   <p className="text-areia-suave/80 text-sm leading-relaxed">{step.text}</p>
                 </div>
               );
@@ -82,8 +82,8 @@ export default function Method() {
         {/* MOBILE */}
         <div className="md:hidden w-full h-[300px] relative flex items-center justify-center">
             <div className="bg-cinza-medio border border-cinza-claro rounded-lg p-6 text-left w-full max-w-[320px] shadow-lg">
-                <span className="block text-3xl font-bold text-areia-suave mb-3">{mobileStep.number}</span>
-                <h4 className="text-lg font-semibold text-off-white mb-3">{mobileStep.title}</h4>
+                <span className="block text-3xl font-title font-bold text-areia-suave mb-3">{mobileStep.number}</span>
+                <h4 className="text-lg font-title font-semibold text-off-white mb-3">{mobileStep.title}</h4>
                 <p className="text-areia-suave/80 text-sm leading-relaxed">{mobileStep.text}</p>
             </div>
         </div>

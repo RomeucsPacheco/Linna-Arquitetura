@@ -49,7 +49,7 @@ export default function Team() {
         
         {/* TÍTULO CENTRALIZADO (Igual ao HTML original) */}
         <div className="flex justify-center mb-12">
-            <h3 className="text-3xl md:text-[2.5em] font-bold text-off-white flex items-center gap-4">
+            <h3 className="text-3xl md:text-[2.5em] font-title font-bold text-off-white flex items-center gap-4">
                 Nossa Equipe
                 <span className="inline-block w-3 h-3 border-b-[3px] border-r-[3px] border-areia-suave rotate-45 -mt-1" />
             </h3>
@@ -79,8 +79,8 @@ export default function Team() {
                     className="w-full h-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 flex flex-col justify-end p-6 transition-all duration-500 bg-gradient-to-t from-black-arch via-black-arch/60 to-transparent group-hover:via-black-arch/80">
-                    <h4 className="text-2xl font-bold text-off-white mb-1">{member.name}</h4>
-                    <h5 className="text-sm uppercase tracking-wider text-areia-suave mb-2 font-medium">{member.role}</h5>
+                    <h4 className="text-2xl font-title font-bold text-off-white mb-1">{member.name}</h4>
+                    <h5 className="text-sm font-title uppercase tracking-wider text-areia-suave mb-2 font-medium">{member.role}</h5>
                     <div className="overflow-hidden max-h-0 group-hover:max-h-[150px] transition-all duration-500 ease-in-out">
                       <p className="text-sm text-off-white/80 leading-relaxed pt-2 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity delay-100">
                         {member.desc}

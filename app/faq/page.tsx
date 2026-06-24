@@ -32,7 +32,7 @@ export default function FAQ() {
         <div className="container mx-auto max-w-[800px]">
           
           <motion.h1 
-            className="text-4xl md:text-6xl font-bold text-off-white mb-12 text-center"
+            className="text-4xl md:text-6xl font-title font-bold text-off-white mb-12 text-center"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
