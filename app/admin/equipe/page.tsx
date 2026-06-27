@@ -5,62 +5,62 @@ import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
 
 export default function ListarEquipe() {
-    const [membros, setMembros] = useState<any[]>([])
-    const [loading, setLoading] = useState(true)
+  const [membros, setMembros] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        fetchMembros()
-    }, [])
+  useEffect(() => {
+    fetchMembros()
+  }, [])
 
-    async function fetchMembros() {
-        const { data, error} = await supabase
-        .from('membro_equipe')
-        .select('*')
-        .order('nome', {ascending: true})
+  async function fetchMembros() {
+    const { data, error } = await supabase
+      .from('membro_equipe')
+      .select('*')
+      .order('nome', { ascending: true })
 
-        if (data) setMembros(data)
-            setLoading(false)
-    }
+    if (data) setMembros(data)
+    setLoading(false)
+  }
 
-    async function handleDelete(membro: any) {
-        const confirmar = confirm(`Tem certeza que deseja remover ${membro.nome} da equipe?`);
-        if (confirmar) {
-            // Remove a foto do storage, se existir
-            if (membro.foto_url) {
-                try {
-                    let filePath = membro.foto_url.split('/public/equipe/')[1];
-                    let bucketName = 'equipe';
-                    
-                    if (!filePath) {
-                        // Tenta pelo bucket antigo caso a foto seja da versão anterior
-                        filePath = membro.foto_url.split('/public/fotos-projetos/')[1];
-                        bucketName = 'fotos-projetos';
-                    }
+  async function handleDelete(membro: any) {
+    const confirmar = confirm(`Tem certeza que deseja remover ${membro.nome} da equipe?`);
+    if (confirmar) {
+      // Remove a foto do storage, se existir
+      if (membro.foto_url) {
+        try {
+          let filePath = membro.foto_url.split('/public/equipe/')[1];
+          let bucketName = 'equipe';
 
-                    if (filePath) {
-                        // Decodifica a URL para lidar com espaços e caracteres especiais no nome do arquivo
-                        const decodedPath = decodeURIComponent(filePath);
-                        await supabase.storage.from(bucketName).remove([decodedPath]);
-                    }
-                } catch (e) {
-                    console.error("Erro ao deletar foto do storage", e);
-                }
-            }
+          if (!filePath) {
+            // Tenta pelo bucket antigo caso a foto seja da versão anterior
+            filePath = membro.foto_url.split('/public/fotos-projetos/')[1];
+            bucketName = 'fotos-projetos';
+          }
 
-            const { error } = await supabase
-            .from('membro_equipe')
-            .delete()
-            .eq('id', membro.id);
-
-            if (error) {
-                alert("Erro ao excluir: " + error.message);
-            } else {
-                alert("Membro removido com sucesso!");
-                fetchMembros(); //Atualiza a lista automaticamente
-            }
+          if (filePath) {
+            // Decodifica a URL para lidar com espaços e caracteres especiais no nome do arquivo
+            const decodedPath = decodeURIComponent(filePath);
+            await supabase.storage.from(bucketName).remove([decodedPath]);
+          }
+        } catch (e) {
+          console.error("Erro ao deletar foto do storage", e);
         }
+      }
+
+      const { error } = await supabase
+        .from('membro_equipe')
+        .delete()
+        .eq('id', membro.id);
+
+      if (error) {
+        alert("Erro ao excluir: " + error.message);
+      } else {
+        alert("Membro removido com sucesso!");
+        fetchMembros(); //Atualiza a lista automaticamente
+      }
     }
-    return (
+  }
+  return (
     <div className="p-10 bg-[#F5F5F0] min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <div>
@@ -68,18 +68,18 @@ export default function ListarEquipe() {
           <p className="text-gray-500 text-sm">Gerencie quem aparece no site</p>
         </div>
         <div className="flex gap-4">
-            <Link 
-            href="/admin/dashboard" 
+          <Link
+            href="/admin/dashboard"
             className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
-            >
+          >
             Voltar
-            </Link>
-            <Link 
+          </Link>
+          <Link 
             href="/admin/equipe/novo" 
             className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
-            >
+          >
             + Adicionar Membro
-            </Link>
+          </Link>
         </div>
       </div>
 
@@ -103,9 +103,9 @@ export default function ListarEquipe() {
                 <tr key={membro.id} className="hover:bg-gray-50 transition-colors">
                   <td className="p-4">
                     {membro.foto_url ? (
-                      <img 
-                        src={membro.foto_url} 
-                        alt={membro.nome} 
+                      <img
+                        src={membro.foto_url}
+                        alt={membro.nome}
                         className="w-12 h-12 rounded-full object-cover border border-gray-200"
                       />
                     ) : (

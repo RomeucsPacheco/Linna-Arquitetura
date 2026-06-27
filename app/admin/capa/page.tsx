@@ -18,7 +18,7 @@ export default function GerenciarCapa() {
                 .select('imagem_url')
                 .eq('id', 1)
                 .single()
-            
+
             if (data && data.imagem_url) {
                 setCapaAtual(data.imagem_url)
             }
@@ -96,8 +96,8 @@ export default function GerenciarCapa() {
                     <h1 className="text-2xl font-bold text-black">Capa do Início</h1>
                     <p className="text-gray-500 text-sm">Gerencie a imagem de fundo principal do site</p>
                 </div>
-                <Link 
-                    href="/admin/dashboard" 
+                <Link
+                    href="/admin/dashboard"
                     className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
                 >
                     Voltar
@@ -119,8 +119,8 @@ export default function GerenciarCapa() {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Nova Capa</label>
-                        <input 
-                            type="file" 
+                        <input
+                            type="file"
                             accept="image/*"
                             onChange={handleFileChange}
                             className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#D4C3A1] outline-none"
@@ -134,8 +134,8 @@ export default function GerenciarCapa() {
                         )}
                     </div>
 
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         disabled={loading || !novaCapa}
                         className="w-full bg-black text-white p-3 rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400"
                     >
