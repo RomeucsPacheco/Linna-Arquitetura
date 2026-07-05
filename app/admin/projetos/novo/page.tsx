@@ -42,25 +42,39 @@ export default function NovoProjeto() {
             }
 
             //uploado das fotos (RF08)
+            let uploadErros = 0;
 
             for (const file of orderedFiles) {
-                const fileName = `${Date.now()}-${file.name}`
+                const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
+                const fileName = `${Date.now()}-${safeName}`
                 const { data: uploadData, error: uError} = await supabase.storage
                     .from('fotos-projeto')
                     .upload(fileName, file)
 
-                    if(uploadData) {
-                        //pega a URL pública da foto
-                        const { data: urlData } = supabase.storage.from('fotos-projeto').getPublicUrl(fileName)
+                if (uError) {
+                    console.error("Erro no upload da foto:", uError);
+                    uploadErros++;
+                    continue;
+                }
 
-                        //salvar a url na tabela de fotos viculada ao projeto
-                        await supabase.from('foto_projeto').insert([{
-                            projeto_id: projeto.id,
-                            url: urlData.publicUrl
-                        }])
-                    }
+                if(uploadData) {
+                    //pega a URL pública da foto
+                    const { data: urlData } = supabase.storage.from('fotos-projeto').getPublicUrl(fileName)
+
+                    //salvar a url na tabela de fotos viculada ao projeto
+                    await supabase.from('foto_projeto').insert([{
+                        projeto_id: projeto.id,
+                        url: urlData.publicUrl
+                    }])
+                }
             }
-            alert("Projeto cadastrado com sucesso!")
+            
+            if (uploadErros > 0) {
+                alert(`Projeto cadastrado, mas houve falha no envio de ${uploadErros} foto(s).`)
+            } else {
+                alert("Projeto cadastrado com sucesso!")
+            }
+            
             router.push('/admin/projetos')
     }
 

@@ -41,14 +41,20 @@
   --foreground: #0C0C0C;
 
   /* Cores invertidas para o modo claro */
-  --off-white: #1a1a1a;       /* Texto vira escuro */
-  --areia-suave: #B08775;     /* Acentuação fica mais forte para contraste */
+  --off-white: #1a1a1a;
+  /* Texto vira escuro */
+  --areia-suave: #B08775;
+  /* Acentuação fica mais forte para contraste */
   --terracota: #D5D1C8;
   --ambar: #C85238;
-  --black-arch: #FFFFFF;      /* Fundo principal vira branco */
-  --cinza-escuro: #F4F4F5;    /* Seções alternadas viram cinza bem claro */
-  --cinza-medio: #E4E4E7;     /* Cards viram cinza claro */
-  --cinza-claro: #D4D4D8;     /* Bordas um pouco mais visíveis */
+  --black-arch: #FFFFFF;
+  /* Fundo principal vira branco */
+  --cinza-escuro: #F4F4F5;
+  /* Seções alternadas viram cinza bem claro */
+  --cinza-medio: #E4E4E7;
+  /* Cards viram cinza claro */
+  --cinza-claro: #D4D4D8;
+  /* Bordas um pouco mais visíveis */
 }
 
 /* --- SEUS ESTILOS GLOBAIS (MANTIDOS) --- */
@@ -56,29 +62,37 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  -webkit-font-smoothing: subpixel-antialiased; /* Mantido */
-  
+  -webkit-font-smoothing: subpixel-antialiased;
+  /* Mantido */
+
   /* Adicionei transição para o tema trocar suavemente */
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 html {
-  scroll-behavior: smooth; /* Mantido */
+  scroll-behavior: smooth;
+  /* Mantido */
 }
 
 /* Barra de rolagem estilizada (Mantida) */
 ::-webkit-scrollbar {
   width: 10px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--cinza-escuro); /* Atualizado para usar variável */
+  background: var(--cinza-escuro);
+  /* Atualizado para usar variável */
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--cinza-claro);  /* Atualizado para usar variável */
+  background: var(--cinza-claro);
+  /* Atualizado para usar variável */
   border-radius: 5px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--areia-suave);  /* Atualizado para usar variável */
+  background: var(--areia-suave);
+  /* Atualizado para usar variável */
 }
 
 /* ========================================= */
@@ -88,6 +102,7 @@ html {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -105,9 +120,9 @@ html {
 div[class*="nextjs-toast"],
 div[class*="build-activity"],
 nextjs-portal {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    z-index: -9999 !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
 }
