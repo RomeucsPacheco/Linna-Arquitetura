@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { useRouter } from "next/navigation"
 
@@ -11,12 +11,22 @@ export default function NovoProjeto() {
     const [files, setFiles] = useState<File[]>([])
     const [coverIndex, setCoverIndex] = useState(0) // Estado para armazenar o índice da capa
 
+    useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) {
+                router.push('/admin/login')
+            }
+        }
+        checkSession()
+    }, [router])
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
 
         //criar o registro do projeto
-        const { data: projeto, error: pError} = await supabase
+        const { data: projeto, error: pError, status } = await supabase
             .from('projeto')
             .insert([{
                 titulo: form.titulo,
@@ -28,8 +38,8 @@ export default function NovoProjeto() {
             .select()
             .single()
 
-            if(pError) {
-                alert("Erro ao criar projeto");
+            if(pError || (status !== 201 && status !== 204)) {
+                alert("Erro ao criar projeto: " + (pError?.message || "Operação não permitida"));
                 setLoading(false);
                 return;
             }

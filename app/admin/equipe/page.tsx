@@ -3,10 +3,22 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function ListarEquipe() {
   const [membros, setMembros] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/admin/login')
+      }
+    }
+    checkSession()
+  }, [router])
 
   useEffect(() => {
     fetchMembros()
@@ -47,13 +59,13 @@ export default function ListarEquipe() {
         }
       }
 
-      const { error } = await supabase
+      const { error, status } = await supabase
         .from('membro_equipe')
         .delete()
         .eq('id', membro.id);
 
-      if (error) {
-        alert("Erro ao excluir: " + error.message);
+      if (error || (status !== 200 && status !== 204 && status !== 201)) {
+        alert("Erro ao excluir: " + (error?.message || "Operação não permitida"));
       } else {
         alert("Membro removido com sucesso!");
         fetchMembros(); //Atualiza a lista automaticamente

@@ -12,6 +12,16 @@ export default function EditarFAQ() {
     const [resposta, setResposta] =  useState('')
 
     useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) {
+                router.push('/admin/login')
+            }
+        }
+        checkSession()
+    }, [router])
+
+    useEffect(() => {
         async function carregarFAQ() {
             const { data } = await supabase 
             .from('faq')
@@ -32,13 +42,13 @@ export default function EditarFAQ() {
         e.preventDefault()
         setLoading(true)
 
-        const { error } = await supabase
+        const { error, status } = await supabase
         .from('faq')
         .update({ pergunta, resposta})
         .eq('id', params.id)
 
-        if (error) {
-            alert("Erro ao atualizar: " + error.message)
+        if (error || (status !== 200 && status !== 204 && status !== 201)) {
+            alert("Erro ao atualizar: " + (error?.message || "Operação não permitida"))
         } else {
             alert("FAQ atualizado com sucesso!")
             router.push('/admin/faq')

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { useRouter } from "next/navigation"
 export default function NovoFAQ() {
@@ -8,14 +8,25 @@ export default function NovoFAQ() {
     const [resposta, setResposta] = useState('')
     const router = useRouter()
 
+    useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) {
+                router.push('/admin/login')
+            }
+        }
+        checkSession()
+    }, [router])
+
     async function salvar(e: React.FormEvent) {
         e.preventDefault()
-        const { error } = await supabase
+        const { error, status } = await supabase
         .from('faq')
         .insert([{pergunta, resposta}])
 
-        if (error) alert(error.message)
-        else {
+        if (error || (status !== 201 && status !== 204)) {
+            alert("Erro: " + (error?.message || "Operação não permitida"))
+        } else {
             alert("Pergunta adicionada!")
             router.push('/admin/faq')
         }
@@ -38,7 +49,10 @@ return (
           onChange={e => setResposta(e.target.value)} 
           required 
         />
-        <button type="submit" className="bg-black text-white px-6 py-2 rounded">Salvar</button>
+        <div className="flex gap-4">
+          <button type="submit" className="bg-black text-white px-6 py-2 rounded hover:bg-gray-800">Salvar</button>
+          <button type="button" onClick={() => router.back()} className="bg-gray-200 px-6 py-2 rounded text-black hover:bg-gray-300">Cancelar</button>
+        </div>
       </form>
     </div>
   )

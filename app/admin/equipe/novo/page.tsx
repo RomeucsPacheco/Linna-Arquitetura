@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {supabase} from '@/lib/supabaseClient'
 import { useRouter } from "next/navigation"
 
@@ -11,6 +11,16 @@ export default function NovoMembro() {
     const [cargo, setCargo] = useState('')
     const [descricao, setDescricao] = useState('')
     const [foto, setFoto] = useState<File | null>(null)
+
+    useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) {
+                router.push('/admin/login')
+            }
+        }
+        checkSession()
+    }, [router])
     
     const handleSalvarMembro =  async (e: React.FormEvent) => {
         e.preventDefault()
@@ -38,12 +48,12 @@ export default function NovoMembro() {
         }
         
         // Salvar no banco de dados (Entidade membro_equipe)
-        const { error } = await supabase
+        const { error, status } = await supabase
         .from('membro_equipe')
         .insert([{ nome, cargo, foto_url: urlPublica, descricao: descricao }])
 
-        if (error) {
-            alert("Erro ao cadastrar membro: " + error.message)
+        if (error || (status !== 201 && status !== 204)) {
+            alert("Erro ao cadastrar membro: " + (error?.message || "Operação não permitida"))
         } else {
             alert("Membro da equipe adicionado!")
             router.push('/admin/dashboard') // ou para a listagem da equipe

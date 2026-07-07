@@ -25,6 +25,16 @@ export default function EditarProjeto() {
     const [capa, setCapa] = useState<{ tipo: 'original' | 'nova', valor: number | string } | null>(null)
 
     useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) {
+                router.push('/admin/login')
+            }
+        }
+        checkSession()
+    }, [router])
+
+    useEffect(() => {
         async function fetchProjeto() {
             const { data, error } = await supabase
             .from('projeto')
@@ -63,13 +73,13 @@ export default function EditarProjeto() {
         setSaving(true)
 
         // 1. Atualiza dados do projeto
-        const { error } = await supabase
+        const { error, status } = await supabase
         .from('projeto')
         .update(form)
         .eq('id', params.id)
 
-        if (error) {
-            alert("Erro ao atualizar projeto: " + error.message)
+        if (error || (status !== 200 && status !== 204 && status !== 201)) {
+            alert("Erro ao atualizar projeto: " + (error?.message || "Operação não permitida"))
             setSaving(false)
             return
         }

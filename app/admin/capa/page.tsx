@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function GerenciarCapa() {
     const [capaAtual, setCapaAtual] = useState<string | null>(null)
@@ -10,6 +11,17 @@ export default function GerenciarCapa() {
     const [preview, setPreview] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const [fetching, setFetching] = useState(true)
+    const router = useRouter()
+
+    useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) {
+                router.push('/admin/login')
+            }
+        }
+        checkSession()
+    }, [router])
 
     useEffect(() => {
         async function fetchCapa() {
@@ -68,11 +80,13 @@ export default function GerenciarCapa() {
                 .getPublicUrl(filePath)
 
             // 3. Atualizar no banco de dados (tabela hero_capa, id = 1)
-            const { error: dbError } = await supabase
+            const { error: dbError, status } = await supabase
                 .from('hero_capa')
                 .upsert({ id: 1, imagem_url: publicUrl })
 
-            if (dbError) throw dbError
+            if (dbError || (status !== 200 && status !== 201 && status !== 204)) {
+                throw new Error(dbError?.message || "Operação não permitida")
+            }
 
             alert("Capa atualizada com sucesso!")
             setCapaAtual(publicUrl)

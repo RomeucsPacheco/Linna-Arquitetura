@@ -3,9 +3,21 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function ListarProjetos() {
   const [projetos, setProjetos] = useState<any[]>([])
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/admin/login')
+      }
+    }
+    checkSession()
+  }, [router])
 
   useEffect(() => {
     fetchProjetos()
@@ -56,13 +68,13 @@ export default function ListarProjetos() {
         console.error("Erro ao deletar fotos do storage:", e);
       }
 
-      const { error } = await supabase
+      const { error, status } = await supabase
         .from('projeto')
         .delete()
         .eq('id', id);
 
-      if (error) {
-        alert(" Erro ao excluir projeto: " + error.message);
+      if (error || (status !== 200 && status !== 204 && status !== 201)) {
+        alert("Erro ao excluir projeto: " + (error?.message || "Operação não permitida"));
       } else {
         //atualiza a interface removendo o item da lista
         setProjetos(prev => prev.filter(p => p.id !== id));

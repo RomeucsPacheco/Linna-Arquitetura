@@ -3,10 +3,22 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function GerenciarFAQ() {
   const [faqs, setFaqs] = useState<any[]>([])
   const [loading, setloading] = useState(true)
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/admin/login')
+      }
+    }
+    checkSession()
+  }, [router])
 
   useEffect(() => {
     fetchFaqs()
@@ -23,11 +35,13 @@ export default function GerenciarFAQ() {
 
   async function handleDelete(id: number) {
     if (confirm("Deseja excluir essa pergunta?")) {
-      const { error } = await supabase
+      const { error, status } = await supabase
         .from('faq')
         .delete()
         .eq('id', id)
-      if (!error) {
+      if (error || (status !== 200 && status !== 204 && status !== 201)) {
+        alert("Erro ao excluir: " + (error?.message || "Operação não permitida"))
+      } else {
         setFaqs(faqs.filter(f => f.id !== id))
         alert("Excluído com sucesso!")
       }

@@ -16,6 +16,16 @@ export default function EditarMembro() {
     const [fotoUrl, setFotoUrl] = useState('')
     const [novaFoto, setNovaFoto] = useState<File | null>(null)
 
+    useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) {
+                router.push('/admin/login')
+            }
+        }
+        checkSession()
+    }, [router])
+
     //Carregar dados atuais do moembro ao abrir a pagina
     useEffect(() => {
         async function carregarMembro(){
@@ -61,13 +71,13 @@ export default function EditarMembro() {
             }
         }
         //atualiza o banco (UPDATE)
-        const { error } = await supabase
+        const { error, status } = await supabase
         .from('membro_equipe')
         .update({ nome, cargo, descricao, foto_url: urlFinal})
         .eq('id', params.id)
 
-        if (error) {
-            alert("Erro ao atualizar: " + error.message)
+        if (error || (status !== 200 && status !== 204 && status !== 201)) {
+            alert("Erro ao atualizar: " + (error?.message || "Operação não permitida"))
         } else {
             alert("Membro atualizado com sucesso!")
             router.push('/admin/equipe')
